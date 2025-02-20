@@ -3,14 +3,12 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-
 st.title("📊 Анализ данных о недвижимости")
 
 plt.style.use("dark_background")
 sns.set_style("darkgrid")
 
 sns.set_palette("mako")
-
 
 @st.cache_data
 def load_data():
