@@ -1,70 +1,88 @@
 import pandas as pd
-import numpy as np
 import random
+import numpy as np
 
-# Список городов Татарстана и этапов олимпиады
-tatarstan_cities = [
-    "Казань", "Набережные Челны", "Альметьевск", "Зеленодольск", "Бугульма",
-    "Елабуга", "Лениногорск", "Чистополь", "Азнакаево", "Заинск", "Бавлы",
-    "Менделеевск", "Мамадыш", "Арск", "Агрыз", "Буинск", "Апастово", "Кукмор",
-    "Тетюши", "Балтаси"
-]
+educational_institutions = {
+    "Казань": [
+        "Казанский авиационно-технический колледж",
+        "Казанский медицинский колледж",
+        "Казанский педагогический колледж",
+        "Казанский строительный колледж",
+        "Казанский колледж технологий и дизайна",
+        "Казанский энергетический колледж",
+        "Казанский автотранспортный техникум",
+        "Казанский колледж информационных технологий",
+        "Казанский аграрный колледж"
+    ],
+    "Набережные Челны": [
+        "Набережночелнинский педагогический колледж",
+        "Набережночелнинский политехнический колледж",
+        "Набережночелнинский медицинский колледж",
+        "Набережночелнинский машиностроительный техникум",
+        "Набережночелнинский строительный колледж"
+    ],
+    "Альметьевск": [
+        "Альметьевский политехнический колледж",
+        "Альметьевский медицинский колледж",
+        "Альметьевский государственный нефтяной институт"
+    ],
+    "Чистополь": [
+        "Чистопольский сельскохозяйственный техникум",
+        "Чистопольский механический колледж"
+    ]
+}
 
-stages = ["Школьный", "Муниципальный", "Региональный", "Заключительный"]
-
-# Количество записей
-num_records = 2000
+num_rows = 200
 data = []
 
-for _ in range(num_records):
-    city = random.choice(tatarstan_cities)
-    stage = random.choice(stages)
+for _ in range(num_rows):
+    city = random.choice(list(educational_institutions.keys()))
+    institution = random.choice(educational_institutions[city])
+    year = random.choice(range(2018, 2025))
+    max_score_all = random.choice([100, 80, 60])
+    max_score_theoretical = random.choice([50, 40, 30])
+    max_score_practical = random.choice([50, 40, 30])
+    participants = random.randint(0, 5)
+    gender = random.choice(["м", "ж"]) if participants > 0 else np.nan
+    winners = random.randint(0, participants) if participants > 0 else np.nan
+    prizery = random.randint(0, winners) if winners > 0 else np.nan
+    max_score_participant = random.uniform(30, max_score_all) if participants > 0 else np.nan
+    theoretical_test = random.uniform(10, max_score_theoretical) if participants > 0 else np.nan
+    max_practical_score = random.uniform(10, max_score_practical) if participants > 0 else np.nan
 
-    # Внесение ошибок в формат года
-    year = random.choice([
-        random.randint(2015, 2024),
-        float(random.randint(2015, 2024)) if random.random() < 0.2 else random.randint(2015, 2024),
-        str(random.randint(2015, 2024)) if random.random() < 0.15 else random.randint(2015, 2024)
+    analysis_models = random.uniform(2, 10) if participants > 0 else np.nan
+    database_search = random.uniform(2, 10) if participants > 0 else np.nan
+    encoding_decoding = random.uniform(2, 10) if participants > 0 else np.nan
+    algorithm_results = random.uniform(2, 10) if participants > 0 else np.nan
+    table_work = random.uniform(2, 10) if participants > 0 else np.nan
+    text_search = random.uniform(2, 10) if participants > 0 else np.nan
+    network_organization = random.uniform(2, 10) if participants > 0 else np.nan
+    programming = random.uniform(2, 10) if participants > 0 else np.nan
+    data_security = random.uniform(2, 10) if participants > 0 else np.nan
+
+    data.append([
+        institution, city, year, max_score_all, max_score_theoretical, max_score_practical,
+        participants, gender, winners, prizery, max_score_participant, theoretical_test,
+        max_practical_score, analysis_models, database_search, encoding_decoding,
+        algorithm_results, table_work, text_search, network_organization, programming, data_security
     ])
 
-    # Пропуски и ошибки в числовых данных
-    participants = random.choice([
-        max(10, random.randint(5, 200)),
-        np.nan if random.random() < 0.3 else max(10, random.randint(5, 200)),
-        "ошибка" if random.random() < 0.1 else max(10, random.randint(5, 200))
-    ])
-
-    # Исправление NaN перед int()
-    participants_cleaned = int(participants) if isinstance(participants, (int, float)) and not np.isnan(participants) else 0
-
-    winners = random.choice([
-        max(0, min(participants_cleaned, random.randint(0, max(1, participants_cleaned // 2)))),
-        np.nan if random.random() < 0.25 else max(0, min(participants_cleaned, random.randint(0, max(1, participants_cleaned // 2)))),
-        "ошибка" if random.random() < 0.08 else max(0, min(participants_cleaned, random.randint(0, max(1, participants_cleaned // 2))))
-    ])
-
-    percent_winners = round((winners / participants_cleaned) * 100, 2) if participants_cleaned > 0 and isinstance(winners, (int, float)) and winners > 0 else np.nan
-    if random.random() < 0.2:
-        percent_winners = "ошибка"
-
-    avg_score = random.choice([
-        round(random.uniform(40, 100), 2),
-        np.nan if random.random() < 0.2 else round(random.uniform(40, 100), 2),
-        -1 if random.random() < 0.1 else round(random.uniform(40, 100), 2),
-        "ошибка" if random.random() < 0.1 else round(random.uniform(40, 100), 2)
-    ])
-
-    data.append([city, stage, year, participants, winners, percent_winners, avg_score])
-
-# Создание DataFrame
+# Названия столбцов
 columns = [
-    "Муниципалитет", "Этап олимпиады", "Год проведения", "Количество участников",
-    "Количество призёров", "Процент призёров", "Средний балл по этапу"
+    "Учебное заведение", "Город", "Год участия", "Максимальный балл за все задания",
+    "Максимальный балл за теоретическое задание", "Максимальный балл за практическое задание",
+    "Количество участников", "Пол", "Количество победителей", "Количество призеров",
+    "Максимальный балл участника за оба задания", "Теоретическое тестирование",
+    "Максимальный балл участника за практическое задание", "Анализ информационных моделей",
+    "Поиск информации в реляционных базах данных", "Кодирование и декодирование информации",
+    "Определение результатов работы алгоритмов", "Работа с таблицами",
+    "Поиск символов в текстовом редакторе", "Организация компьютерных сетей. Адресация",
+    "Программирование", "Безопасность данных"
 ]
+
 df = pd.DataFrame(data, columns=columns)
 
-df.to_csv('../data/olympiad_data.csv', index=False)
+file_path = "../data/olympiad_data.csv"
+df.to_csv(file_path, index=False)
 
-# Проверка количества пропусков
-print(df.isnull().sum().sort_values(ascending=False))
-print("\n✅ Данные олимпиады по Республике Татарстан успешно обновлены!")
+print("\n✅ Данные олимпиады по Республике Татарстан!")
