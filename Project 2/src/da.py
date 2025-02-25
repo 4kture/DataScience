@@ -7,9 +7,10 @@ df = pd.read_csv('../data/text_data.csv')
 
 stop_words = {'Текст1', 'Текст2'}
 
-df = df.dropna(subset=['Текст обращения']).copy()
+df = df.dropna(subset=['Текст обращения'])
 df['Тематика'] = df['Тематика'].fillna('Не указано')
-df_unique_texts = pd.DataFrame(df["Текст обращения"].dropna().unique(), columns=["Уникальные тексты"])
+
+num1 = pd.DataFrame(df['Текст обращения'].unique())
 
 def clean_text(text):
     text = text.lower()
@@ -30,7 +31,7 @@ df["Кластер"] = kmeans.fit_predict(X)
 
 for cluster_num in range(num_clusters):
     print(f"\nКластер {cluster_num}:")
-    print(df[df["Кластер"] == cluster_num]["Текст обращения"].head(5).tolist())
+    print(df[df["Кластер"] == cluster_num]["Текст обращения"].head().tolist())
 
 cluster_names = {0: "Текст1", 1: "Текст2"}
 
