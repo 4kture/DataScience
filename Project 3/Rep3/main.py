@@ -23,4 +23,4 @@ vectorizer = TfidfVectorizer()
 X = vectorizer.fit_transform(df["Текст"])
 df_vect = pd.DataFrame(X.toarray(), columns=vectorizer.get_feature_names_out())
 
-df_vect.to_csv("vectorized.csv", index=False)
+df_vect.to_csv("vectorized.csv", index=False, encoding="utf-8-sig")

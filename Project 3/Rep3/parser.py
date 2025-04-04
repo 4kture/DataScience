@@ -1,12 +1,18 @@
 from bs4 import BeautifulSoup
 import pandas as pd
 
-with open("патент.html", encoding="utf-8") as f:
-    s = BeautifulSoup(f, "html.parser")
+with open("патент.html", encoding='utf-8') as fp:
+    s = BeautifulSoup(fp, 'html.parser')
 
-df = pd.DataFrame([[
-    b.find("h1", id="title").get_text(" ", strip=True),
-    b.find("div", id="doc-abstract-text").get_text(" ", strip=True)
-] for b in s.find_all("div", class_="patent")], columns=["title", "abstract"])
+data = []
 
-df.to_csv("parsed.csv", index=False, encoding="utf-8-sig")
+titles = s.find_all('h1', id='title')
+texts = s.find_all('div', id='doc-abstract-text')
+
+for a, b in zip(titles, texts):
+    title = a.get_text(' ', strip=True)
+    text = b.get_text(' ', strip=True)
+    data.append([title, text])
+
+df = pd.DataFrame(data, columns=['title', 'text'])
+df.to_csv("parsed.csv", index=False)
